@@ -31,11 +31,11 @@ function SideBarAdmin() {
 
   const navigate=useNavigate()
 
-  const handleLogout=()=>{
-    sessionStorage.clear()
-    navigate('/login')
+  const handleLogout = () => {
+  sessionStorage.clear();
+  navigate("/login", { replace: true }); // ✅ important
+};
 
-  }
 
   return (
     <Drawer

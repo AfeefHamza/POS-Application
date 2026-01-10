@@ -25,11 +25,11 @@ function SidebarPOS() {
 
   const navigate=useNavigate()
   
-    const handleLogout=()=>{
-      sessionStorage.clear()
-      navigate('/login')
-  
-    }
+    const handleLogout = () => {
+  sessionStorage.clear();
+  navigate("/login", { replace: true }); // ✅ important
+};
+
 
     const [username,setUserName]=useState("")
 
