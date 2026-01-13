@@ -18,31 +18,7 @@ import BrandList from './Admin/BrandList'
 import EditProfile from './Components/EditProfile'
 import CreateCustomer from './Pages/CreateCustomer'
 import UsersList from './Admin/UsersList'
-import { useContext } from 'react'
-import { authorizationContext } from './Contexts/AuthorizationContext'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import PrivateRoute from './Routes/PrivateRoute'
 
 
 function App() {
@@ -59,6 +35,7 @@ function App() {
       <Routes>
         <Route path='/login' element={<Authorization/>}  />
         <Route path='/register' element={<Authorization insideRegister={true}/>}/>
+        <Route element={<PrivateRoute />}>
         <Route path='/' element={<Home/>}  />
 
 
@@ -72,29 +49,16 @@ function App() {
         <Route path='/users-list' element={<UsersList/>} />
 
 
-
-
-
         <Route path='/dashboardUser' element={<DashboardUser/>}/>
         <Route path='/allproducts' element={<Products/>}/>
         <Route path='/sales-report' element={<Sales/>}/>
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/edit-profile' element={<EditProfile/>}/>
         <Route path='/create-customer' element={<CreateCustomer/>}/>
+        </Route>
 
-        
-
-
-
-
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      
-    
-    
-    
-
-
-     
     </>
   )
 }

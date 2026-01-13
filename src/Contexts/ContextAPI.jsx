@@ -15,17 +15,6 @@ export const deleteCustomerResponeContext=createContext()
 export const updateInvoiceResponeContext=createContext()
 
 
-
-
-
-
-
-
-
-
-
-
-
 function ContextAPI({children}) {
 
         const [categoryResponse,setcategoryResponse]=useState("")
@@ -41,18 +30,6 @@ function ContextAPI({children}) {
         const [deleteUserResponse,setdeleteUserResponse]=useState("")
         const [deleteCustomerResponse,setdeleteCustomerResponse]=useState("")
         const [updateInvoiceResponse,setupdateInvoiceResponse]=useState("")
-
-
-
-
-
-
-
-
-
-
-
-
 
     
   return (
@@ -85,17 +62,6 @@ function ContextAPI({children}) {
     </deleteCustomerResponeContext.Provider>
     </updateInvoiceResponeContext.Provider>
    
-   
-   
-    
-    
-    
-    
-    
-    
-    
-       
-
     </>
   )
 }

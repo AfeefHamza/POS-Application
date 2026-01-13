@@ -3,8 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { addInvoiceAPI, getAllCustomersAPI, getInvoiceNumberAPI } from '../Services/allAPIs';
 import { toast } from 'react-toastify';
-import { QRCodeCanvas } from 'qrcode.react';
 import { sellQuantityResponeContext, updateInvoiceResponeContext } from '../Contexts/ContextAPI';
+import SERVER_URL from '../Services/server_url';
 
 
 
@@ -40,21 +40,13 @@ function Sell({ details }) {
 
     const [totalAmount, setTotalAmount] = useState(0);
     const [showPaymentModal, setShowPaymentModal] = useState(false);
-    const [qrCode, setQrCode] = useState('');
     const [paymentConfirmed, setPaymentConfirmed] = useState(false);
 
     const [allCustomers,setallCustomers]=useState([])
           // console.log(allCustomers);
 
-    const qrCodeRef = useRef(null);
 
-    useEffect(() => {
-        if (totalAmount > 0) {
-            generateQrCode(totalAmount);
-        } else {
-            setQrCode('');
-        }
-    }, [totalAmount]);
+    
 
     useEffect(() => {
         getAllCustomer()
@@ -71,28 +63,80 @@ function Sell({ details }) {
         setPaymentConfirmed(false);
     };
 
-    const generateQrCode = (amount) => {
-        const qrData = `Total Amount: ${amount} Payment Success `;
-        setQrCode(qrData);
-    };
+    
 
     const handleShowPayment = () => {
         setShowPaymentModal(true);
     };
 
-    const handleClosePayment = () => {
-        setShowPaymentModal(false);
+    const payNow = async () => {
+  try {
+    const res = await fetch(`${SERVER_URL}/payment/create-order`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        amount: totalAmount,
+        billId: invoiceNumber, // ✅ FIX
+      }),
+    });
+
+    const order = await res.json();
+
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      amount: order.amount,
+      currency: "INR",
+      name: "My POS",
+      description: `Invoice ${invoiceNumber}`,
+      order_id: order.id,
+
+      handler: async (response) => {
+        const token = sessionStorage.getItem("token");
+        const verifyRes = await fetch(`${SERVER_URL}/payment/verify-payment`, {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json",
+            "authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            ...response,
+            invoiceNo: invoiceNumber,
+            amount: totalAmount,
+          }),
+        });
+
+        const data = await verifyRes.json();
+
+        if (data.success) {
+          setPaymentConfirmed(true); // ✅ REQUIRED
+          toast.success("Payment Successful");
+        } else {
+          toast.error("Payment verification failed");
+        }
+      },
+
+      modal: {
+        ondismiss: () => {
+          toast.info("Payment cancelled");
+        },
+      },
+
+      theme: { color: "#0d6efd" },
     };
 
-    const handlePaymentScan = () => {
-        setPaymentConfirmed(true);
-        handleClosePayment();
-    };
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  } catch (err) {
+    console.error(err);
+    toast.error("Payment failed");
+  }
+};
+
+
 
     const resetState = () => {
         setTotalAmount(0);
         setsaleDetails({ customer: "", quantity: "", invoiceNo: "", date: "", amount: 0 });
-        setQrCode('');
         setPaymentConfirmed(false);
     };
 
@@ -262,7 +306,7 @@ function Sell({ details }) {
                                             <input type="text" className="form-control" value={totalAmount} readOnly />
                                         </div>
                                         <div className="col-sm-4">
-                                            <Button variant="outline-primary" onClick={handleShowPayment}>Pay</Button>
+                                            <Button variant="outline-primary" onClick={payNow}>Pay</Button>
                                         </div>
                                     </div>
                                 )}
@@ -277,26 +321,7 @@ function Sell({ details }) {
                 </Modal.Footer>
             </Modal>
 
-            <Modal show={showPaymentModal} onHide={handleClosePayment} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Scan QR Code to Pay</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {qrCode && (
-                        <div style={{ textAlign: 'center' }}>
-                            <QRCodeCanvas value={qrCode} size={256} level="H" ref={qrCodeRef} />
-                        </div>
-                    )}
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="success" onClick={handlePaymentScan}>
-                         Payment Done
-                    </Button>
-                    <Button variant="secondary" onClick={handleClosePayment}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+            
         </>
     );
 }

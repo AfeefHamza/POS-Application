@@ -38,9 +38,9 @@ function SideBarAdmin() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    sessionStorage.clear();
-    navigate('/login');
-  };
+  sessionStorage.clear();
+  navigate("/login", { replace: true }); // ✅ important
+};
 
   const handleMobileClose = () => {
     setIsMobileOpen(false);
