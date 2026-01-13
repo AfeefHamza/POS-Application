@@ -103,6 +103,94 @@ function Authorization({ insideRegister }) {
     }
   };
 
+  // Forgot Password Handlers
+  const handleForgotPasswordRequest = async () => {
+    if (!forgotPasswordData.email) {
+      toast.warning('Please enter your email address');
+      return;
+    }
+    try {
+      const result = await forgotPasswordAPI({ email: forgotPasswordData.email });
+      
+      if (result.status === 200) {
+        setForgotPasswordUserId(result.data.userId);
+        setForgotPasswordStep(2);
+        toast.success('OTP sent to your email address');
+      } else {
+        toast.error(result.response?.data || 'User not found');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Error sending OTP');
+    }
+  };
+
+  const handleForgotPasswordOTPVerify = async () => {
+    if (!forgotPasswordData.otp) {
+      toast.warning('Please enter the OTP');
+      return;
+    }
+    try {
+      const verificationData = { userId: forgotPasswordUserId, resetOtp: forgotPasswordData.otp };
+      console.log("Verifying OTP with data:", verificationData);
+      const result = await verifyresetOTPAPI(verificationData);
+      console.log("OTP Verification result:", result);
+      
+      if (result.status === 200) {
+        setForgotPasswordStep(3);
+        toast.success('OTP verified! Please enter your new password');
+      } else {
+        const errorMsg = result.response?.data?.message || result.response?.data || 'Invalid OTP';
+        console.error("OTP verification failed:", errorMsg);
+        toast.error(errorMsg);
+      }
+    } catch (err) {
+      console.error("OTP verification error:", err);
+      toast.error('OTP verification failed');
+    }
+  };
+
+  const handleResetPassword = async () => {
+    if (!forgotPasswordData.newPassword || !forgotPasswordData.confirmPassword) {
+      toast.warning('Please enter and confirm your new password');
+      return;
+    }
+    
+    if (forgotPasswordData.newPassword !== forgotPasswordData.confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+
+    if (forgotPasswordData.newPassword.length < 6) {
+      toast.warning('Password must be at least 6 characters');
+      return;
+    }
+
+    try {
+      const resetData = {
+        userId: forgotPasswordUserId,
+        newPassword: forgotPasswordData.newPassword,
+        confirmNewPassword: forgotPasswordData.confirmPassword,
+        resetOtp: forgotPasswordData.otp
+      };
+      const result = await resetPasswordAPI(resetData);
+
+      if (result.status === 200) {
+        toast.success('Password reset successfully!');
+        setIsForgotPassword(false);
+        setForgotPasswordStep(1);
+        setForgotPasswordData({ email: "", otp: "", newPassword: "", confirmPassword: "" });
+        setForgotPasswordUserId(null);
+        navigate('/login');
+      } else {
+        toast.error(result.response?.data || 'Password reset failed');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Error resetting password');
+    }
+  };
+
   return (
     <>
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
