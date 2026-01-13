@@ -1,4 +1,5 @@
 import './App.css'
+import './Styles/responsive.css'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import Authorization from './Pages/Authorization'
@@ -46,8 +47,6 @@ import { authorizationContext } from './Contexts/AuthorizationContext'
 
 function App() {
 
-  const {isAuthorized,setIsAuthorized} = useContext(authorizationContext)
-    // console.log(isAuthorized);
 
 
 

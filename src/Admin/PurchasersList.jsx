@@ -5,6 +5,7 @@ import Delete from './AdminComponents/Delete'
 import { getAllCompanyAPI } from '../Services/allAPIs'
 import { deleteCompanyResponseContext } from '../Contexts/ContextAPI'
 import Pgz from './AdminComponents/Pgz'
+import '../Styles/admin-pages.css'
 
 function PurchasersList() {
 
@@ -41,59 +42,62 @@ function PurchasersList() {
 
   return (
    <>
-   <Row>
-      <Col lg={2}>
+   <Row style={{ margin: 0 }}>
+      <Col md={2} className="p-0">
         <SideBarAdmin/>
       </Col>
 
-      <Col lg={10}>
-        <div className="container-fluid p-4" style={{ background: 'linear-gradient(135deg,rgb(103, 115, 139), #e0f2fe)' }}>
-          <div className="row">
-            <div className="col-md-12">
-              <div className="card shadow-lg border-0 rounded-4"style={{ backgroundColor: '#e6f7ff' }}>
-                <div className="card-body">
-                  <div className="row mb-3">
-                    <div className="col-md-12 d-flex justify-content-end">
-                      <div className="input-group" style={{ maxWidth: '300px' }}>
-                        <span className="input-group-text bg-primary text-white">
-                          <i className="fas fa-search"></i>
-                        </span>
-                        <input onChange={(e)=>setSearchKey(e.target.value)} type="text" className="form-control" placeholder="Search Company..." />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="table-responsive">
-                    <table className="table table-striped table-bordered">
-                      <thead className="table-primary text-white">
-                        <tr>
-                          <th>#</th>
-                          <th>Company Name</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {currentItems?.length > 0 ?
-                          currentItems.map((item,index) => (
-                            <tr key={item.id}>
-                              <td>{startingIndex+index+1}</td>
-                              <td>{item.companyname}</td>
-                              <td>
-                                <Delete information={item} insideCompanyList={true}/>
-                              </td>
-                            </tr>
-                          )) :
-                          <tr>
-                            <td colSpan="3" className='text-center text-danger'>Nothing To Display...</td>
-                          </tr>
-                        }
-                      </tbody>
-                    </table>
-                    {currentItems?.length>0 &&
-                      <Pgz totalitems={allCompany.length} itemPerPage={8} setcurrentPage={setcurrentPage} currentPage={currentPage}/>
-                    }
-                  </div>
-                </div>
+      <Col md={10} className="p-0">
+        <div className="page-container p-4" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #fce7f3 100%)' }}>
+          <div className="page-header mb-4">
+            <h1>Supplier Management</h1>
+            <p>Manage all supplier companies</p>
+          </div>
+          <div className="modern-card p-4 mb-4">
+            <div className="filter-section">
+              <div className="search-box" style={{ maxWidth: '400px' }}>
+                <i className="fas fa-search"></i>
+                <input onChange={(e)=>setSearchKey(e.target.value)} type="text" className="modern-input" placeholder="Search suppliers..." />
               </div>
+            </div>
+          </div>
+          <div className="modern-card overflow-hidden">
+            <div className="table-responsive">
+              <table className="modern-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Company Name</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentItems?.length > 0 ?
+                    currentItems.map((item,index) => (
+                      <tr key={item.id}>
+                        <td><strong>{startingIndex+index+1}</strong></td>
+                        <td>{item.companyname}</td>
+                        <td>
+                          <Delete information={item} insideCompanyList={true}/>
+                        </td>
+                      </tr>
+                    )) :
+                    <tr>
+                      <td colSpan="3" className='text-center'>
+                        <div className="empty-state">
+                          <div className="empty-state-icon">🏢</div>
+                          <p className="empty-state-title">No Suppliers Found</p>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+              {currentItems?.length>0 &&
+                <div className="p-4" style={{ textAlign: 'center', borderTop: '1px solid #e5e7eb' }}>
+                  <Pgz totalitems={allCompany.length} itemPerPage={8} setcurrentPage={setcurrentPage} currentPage={currentPage}/>
+                </div>
+              }
             </div>
           </div>
         </div>

@@ -5,6 +5,7 @@ import { getUserInvoicesAPI } from '../Services/allAPIs'
 import jspdf from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import Pgz from '../Admin/AdminComponents/Pgz'
+import '../Styles/admin-pages.css'
 
 function Sales() {
 
@@ -98,58 +99,67 @@ function Sales() {
 
   return (
     <>
-      <Row>
-        <Col lg={2}>
+      <Row style={{ margin: 0 }}>
+        <Col md={2} className="p-0">
           <SidebarPOS />
         </Col>
 
-        <Col lg={10}>
-          <div className="container-fluid p-4" style={{ background: 'linear-gradient(135deg, #f3f4f6, #e0f2fe)' }}>
-            <div className="row">
-              <div className="col-md-12">
-                <div className="card shadow-lg border-0 rounded-4" style={{ backgroundColor: '#e6f7ff' }}>
-                  <div className="card-body">
-                    <div className="table-responsive">
-                      <table className="table table-striped table-bordered">
-                        <thead className="bg-primary text-white">
-                          <tr>
-                            <th>Invoice No:</th>
-                            <th>Date</th>
-                            <th>Customer Name</th>
-                            <th>Product Name</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Total Amount</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {currentItems?.length > 0 ?
-                            currentItems.map((item, index) => (
-                              <tr key={index}>
-                                <td>{item.invoiceNo}</td>
-                                <td>{item.date}</td>
-                                <td>{item.customer}</td>
-                                <td>{item.productname}</td>
-                                <td>{item.quantity}</td>
-                                <td>{item.sprice}</td>
-                                <td>{item.amount}</td>
-                                <td>
-                                  <button onClick={() => generatepdf(item)} className='btn btn-success rounded-3 shadow-sm'>Download Invoice</button>
-                                </td>
-                              </tr>
-                            ))
-                            :
-                            <tr><td colSpan="8" className='text-danger text-center'>Nothing To Display...</td></tr>
-                          }
-                        </tbody>
-                      </table>
-                      {currentItems?.length>0 &&
-                        <Pgz totalitems={userInvoices.length} itemPerPage={8} setcurrentPage={setcurrentPage} currentPage={currentPage}/>
-                      }
-                    </div>
+        <Col md={10} className="p-0">
+          <div className="page-container p-4" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #fce7f3 100%)' }}>
+            <div className="page-header mb-4">
+              <h1>Sales History</h1>
+              <p>View and manage all your sales invoices</p>
+            </div>
+            <div className="modern-card overflow-hidden">
+              <div className="table-responsive">
+                <table className="modern-table">
+                  <thead>
+                    <tr>
+                      <th>Invoice #</th>
+                      <th>Date</th>
+                      <th>Customer</th>
+                      <th>Product</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                      <th>Total</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentItems?.length > 0 ?
+                      currentItems.map((item, index) => (
+                        <tr key={index}>
+                          <td><strong>#{item.invoiceNo}</strong></td>
+                          <td>{new Date(item.date).toLocaleDateString()}</td>
+                          <td>{item.customer}</td>
+                          <td>{item.productname}</td>
+                          <td><span className="badge-modern badge-info">{item.quantity}</span></td>
+                          <td style={{ color: '#10b981', fontWeight: 'bold' }}>₹{item.sprice}</td>
+                          <td style={{ color: '#0f3460', fontWeight: 'bold', fontSize: '16px' }}>₹{item.amount}</td>
+                          <td>
+                            <button onClick={() => generatepdf(item)} className='modern-btn modern-btn-success' style={{ fontSize: '12px', padding: '6px 12px' }}>
+                              <i className="fas fa-download me-1"></i>Download
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                      :
+                      <tr>
+                        <td colSpan="8" className='text-center'>
+                          <div className="empty-state">
+                            <div className="empty-state-icon">📄</div>
+                            <p className="empty-state-title">No Invoices Found</p>
+                          </div>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+                {currentItems?.length>0 &&
+                  <div className="p-4" style={{ textAlign: 'center', borderTop: '1px solid #e5e7eb' }}>
+                    <Pgz totalitems={userInvoices.length} itemPerPage={8} setcurrentPage={setcurrentPage} currentPage={currentPage}/>
                   </div>
-                </div>
+                }
               </div>
             </div>
           </div>

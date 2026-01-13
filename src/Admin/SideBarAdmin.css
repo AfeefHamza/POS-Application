@@ -1,0 +1,95 @@
+/* Sidebar Admin Styling */
+
+.sidebar-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.sidebar-item:hover::before {
+  left: 100%;
+}
+
+/* Smooth transitions for list items */
+.MuiListItem-root {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Icon animation */
+.MuiListItemIcon-root {
+  animation: iconPulse 0.3s ease-in-out;
+}
+
+@keyframes iconPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Smooth scrollbar for sidebar */
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #0f3460 #2a2a4e;
+}
+
+/* Animations for expand/collapse */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.MuiListItemText-root {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+/* Text fade effect on collapse */
+.MuiListItemText-primary {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* Drawer paper smooth transitions */
+.MuiDrawer-paper {
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Active link styling (optional) */
+.MuiListItemButton-root.active {
+  background: linear-gradient(90deg, rgba(0, 212, 255, 0.2), transparent);
+  border-left: 3px solid #00d4ff !important;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  .MuiDrawer-paper {
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.5);
+  }
+
+  .sidebar-item {
+    width: 100%;
+  }
+}

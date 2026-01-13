@@ -5,6 +5,7 @@ import Delete from './AdminComponents/Delete'
 import { getAllCustomersAPI } from '../Services/allAPIs'
 import { deleteCustomerResponeContext } from '../Contexts/ContextAPI'
 import Pgz from './AdminComponents/Pgz'
+import '../Styles/admin-pages.css'
 
 function CustomerList() {
   const [allCustomers,setallCustomers]=useState([])
@@ -42,63 +43,66 @@ function CustomerList() {
 
   return (
     <>
-    <Row>
-      <Col lg={2}>
+    <Row style={{ margin: 0 }}>
+      <Col md={2} className="p-0">
         <SideBarAdmin/>
       </Col>
 
-      <Col lg={10}>
-        <div className="container-fluid bg-light p-4" style={{ background: 'linear-gradient(135deg,rgb(233, 236, 242),rgb(72, 103, 124))'}}>
-          <div className="row">
-            <div className="col-md-12">
-              <div className="card shadow-lg border-0 rounded-4">
-                <div className="card-body" style={{ backgroundColor: '#e6f7ff' }}>
-                  <div className="row mb-4">
-                    <div className="col-md-12 d-flex justify-content-end">
-                      <div className="input-group" style={{ maxWidth: '300px' }}>
-                        <span className="input-group-text bg-primary text-white">
-                          <i className="fas fa-search"></i>
-                        </span>
-                        <input onChange={(e)=>setSearchKey(e.target.value)} type="text" className="form-control" placeholder="Search Customer..." />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="table-responsive">
-                    <table className="table table-striped table-bordered">
-                      <thead className="table-primary">
-                        <tr>
-                          <th>#</th>
-                          <th>Customer Name</th>
-                          <th>Location</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      {currentItems?.length > 0 ?
-                        currentItems.map((item,index) => (
-                          <tr key={index}>
-                            <td>{startingIndex+index+1}</td>
-                            <td>{item.name}</td>
-                            <td>{item.location}</td>
-                            <td>
-                              <Delete customerData={item} insideCustomerList={true}/>
-                            </td>
-                          </tr>
-                        ))
-                        :
-                        <tr>
-                          <td colSpan="4" className='text-danger text-center'>Nothing To Display...</td>
-                        </tr>
-                      }
-                      </tbody>
-                    </table>
-                    {
-                      currentItems?.length>0 &&
-                      <Pgz totalitems={allCustomers.length} itemPerPage={8} setcurrentPage={setcurrentPage} currentPage={currentPage}/>
-                    }
-                  </div>
-                </div>
+      <Col md={10} className="p-0">
+        <div className="page-container p-4" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #fef3c7 100%)' }}>
+          <div className="page-header mb-4">
+            <h1>Customer Management</h1>
+            <p>Manage all your customers</p>
+          </div>
+          <div className="modern-card p-4 mb-4">
+            <div className="filter-section">
+              <div className="search-box" style={{ maxWidth: '400px' }}>
+                <i className="fas fa-search"></i>
+                <input onChange={(e)=>setSearchKey(e.target.value)} type="text" className="modern-input" placeholder="Search customers..." />
               </div>
+            </div>
+          </div>
+          <div className="modern-card overflow-hidden">
+            <div className="table-responsive">
+              <table className="modern-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Customer Name</th>
+                    <th>Location</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {currentItems?.length > 0 ?
+                  currentItems.map((item,index) => (
+                    <tr key={index}>
+                      <td><strong>{startingIndex+index+1}</strong></td>
+                      <td>{item.name}</td>
+                      <td>{item.location}</td>
+                      <td>
+                        <Delete customerData={item} insideCustomerList={true}/>
+                      </td>
+                    </tr>
+                  ))
+                  :
+                  <tr>
+                    <td colSpan="4" className='text-center'>
+                      <div className="empty-state">
+                        <div className="empty-state-icon">👥</div>
+                        <p className="empty-state-title">No Customers Found</p>
+                      </div>
+                    </td>
+                  </tr>
+                }
+                </tbody>
+              </table>
+              {
+                currentItems?.length>0 &&
+                <div className="p-4" style={{ textAlign: 'center', borderTop: '1px solid #e5e7eb' }}>
+                  <Pgz totalitems={allCustomers.length} itemPerPage={8} setcurrentPage={setcurrentPage} currentPage={currentPage}/>
+                </div>
+              }
             </div>
           </div>
         </div>

@@ -1,0 +1,305 @@
+/* Global Responsive Layout Styles */
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove bootstrap default margin-top that causes gaps */
+.row {
+  margin-top: 0 !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+.col, 
+.col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xs-10, .col-xs-11, .col-xs-12,
+.col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12,
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12,
+.col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12 {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Main content wrapper */
+main, .main-content, .page-content {
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+/* Desktop layout - adjust for sidebar */
+@media (min-width: 768px) {
+  main, .main-content, .page-content {
+    margin-left: 80px;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* When sidebar is expanded */
+  body.sidebar-expanded main,
+  body.sidebar-expanded .main-content,
+  body.sidebar-expanded .page-content {
+    margin-left: 260px;
+  }
+}
+
+/* Mobile layout - full width */
+@media (max-width: 767px) {
+  main, .main-content, .page-content {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 60px;
+    padding: 1rem;
+  }
+}
+
+/* Page-specific responsive adjustments */
+.dashboard-container,
+.admin-container,
+.user-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-container .sidebar,
+.admin-container .sidebar,
+.user-container .sidebar {
+  flex-shrink: 0;
+}
+
+.dashboard-container main,
+.admin-container main,
+.user-container main {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Content padding on mobile */
+@media (max-width: 767px) {
+  main, .main-content, .page-content, .content-wrapper {
+    padding: 1rem;
+  }
+
+  .card {
+    margin-bottom: 1rem;
+  }
+
+  .table-responsive {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Medium devices (tablets) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  main, .main-content, .page-content {
+    padding: 1.5rem;
+  }
+
+  .card {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Large devices (desktops) */
+@media (min-width: 1025px) {
+  main, .main-content, .page-content {
+    padding: 2rem;
+  }
+
+  .card {
+    margin-bottom: 2rem;
+  }
+}
+
+/* Responsive text sizes */
+@media (max-width: 767px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+  }
+
+  .display-4 {
+    font-size: 2rem;
+  }
+}
+
+/* Responsive button sizes */
+@media (max-width: 767px) {
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* Responsive form elements */
+@media (max-width: 767px) {
+  input, textarea, select {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .form-control {
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
+}
+
+/* Responsive tables */
+.table {
+  font-size: 0.875rem;
+}
+
+@media (max-width: 767px) {
+  .table {
+    font-size: 0.75rem;
+  }
+
+  .table th, .table td {
+    padding: 0.5rem;
+  }
+}
+
+/* Responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fix for fixed sidebars causing content overlap */
+@media (min-width: 768px) {
+  .row:has(.MuiDrawer-root) {
+    width: 100%;
+  }
+
+  .MuiDrawer-root + * {
+    margin-left: 80px;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Scrollbar styling for better UX */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Visibility helpers */
+@media (max-width: 767px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .show-mobile {
+    display: none !important;
+  }
+}
+
+/* Prevent horizontal scroll */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Ensure full width for containers */
+.container-fluid {
+  padding: 0;
+  margin: 0;
+}
+
+/* Fix Bootstrap spacing */
+.ms-3, .ps-3 {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+.p-3, .p-4 {
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .p-4 {
+    padding: 1.5rem;
+  }
+}
+
+/* Mobile-first approach for cards */
+.card {
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+
+/* Responsive shadows */
+.shadow-sm {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.shadow {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Ensure proper layout flow */
+main {
+  display: block;
+  width: 100%;
+}
+
+/* Flex container for modern layouts */
+.flex-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.flex-container .sidebar {
+  flex-shrink: 0;
+}
+
+.flex-container main {
+  flex: 1;
+  overflow: auto;
+}

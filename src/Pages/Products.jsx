@@ -5,6 +5,7 @@ import Sell from '../Components/Sell'
 import { getAllBrandAPI, getAllCategoryAPI, getAllProductsAPI } from '../Services/allAPIs'
 import { sellQuantityResponeContext } from '../Contexts/ContextAPI'
 import Pgz from '../Admin/AdminComponents/Pgz'
+import '../Styles/admin-pages.css'
 
 function Products() {
 
@@ -96,85 +97,104 @@ let currentItems=allProducts.slice(startingIndex,endingIndex)
 
 return (
   <>
-    <Row>
-      <Col lg={2}>
+    <Row style={{ margin: 0 }}>
+      <Col md={2} className="p-0">
         <SidebarPOS/>
       </Col>
 
-      <Col lg={10}>
-        <div className="container-fluid bg-light p-4" style={{ backgroundColor: '#f0f8ff' }}>
-          <div className="row">
-            <div className="col-md-12">
-              <div className="card shadow-lg border-0 rounded-3" style={{ backgroundColor: '#e6f7ff' }}>
-                <div className="card-body">
-                  <div className="row mb-4 p-2 border border-info border-2 rounded-4">
-                    <div className="col-md-3">
-                      <label className="form-label fw-bold">Search by Product Name</label>
-                      <input onChange={(e)=>setSearchKey(e.target.value)} type="text" className="form-control" placeholder="Search by Product Name" />
-                    </div>
-                    <div className="col-md-3">
-                      <label className="form-label fw-bold">Filter by Category</label>
-                      <select onChange={(e)=>filterCategory(e.target.value)} className="form-select">
-                        <option defaultValue>Filter by Category</option>
-                        {allCategorys?.length > 0 ?
-                          allCategorys.map((item) => (
-                            <option key={item.name} value={item.name}>{item.name}</option>
-                          )) :
-                          <option className='text-danger'>Nothing To Display...</option>
-                        }
-                      </select>
-                    </div>
-                    <div className="col-md-3">
-                      <label className="form-label fw-bold">Filter by Brand</label>
-                      <select onChange={(e)=>filterBrand(e.target.value)} className="form-select">
-                        <option defaultValue>Filter by Brand</option>
-                        {allBrands?.length > 0 ?
-                          allBrands.map((item) => (
-                            <option key={item.name} value={item.name}>{item.name}</option>
-                          )) :
-                          <option className='text-danger'>Nothing To Display...</option>
-                        }
-                      </select>
-                    </div>
-                  </div>
-                  <div className="table-responsive">
-                    <table className="table table-striped table-bordered text-center">
-                      <thead className="table-info">
-                        <tr>
-                          <th>#</th>
-                          <th>Product Name</th>
-                          <th>Category</th>
-                          <th>Brand</th>
-                          <th>Price</th>
-                          <th>Stock</th>
-                          <th>Purchase From</th>
-                          <th>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {currentItems?.length > 0 ?
-                          currentItems.map((item,index) => (
-                            <tr key={item.name}>
-                              <td>{startingIndex+index+1}</td>
-                              <td>{item.name}</td>
-                              <td>{item.category}</td>
-                              <td>{item.brand}</td>
-                              <td>{item.price}</td>
-                              <td>{item.stock}</td>
-                              <td>{item.companyname}</td>
-                              <td><Sell details={item}/></td>
-                            </tr>
-                          )) :
-                          <tr><td colSpan="8" className='text-danger'>No Products To Display</td></tr>
-                        }
-                      </tbody>
-                    </table>
-                    {currentItems?.length>0 &&
-                      <Pgz totalitems={allProducts.length} itemPerPage={8} setcurrentPage={setcurrentPage} currentPage={currentPage}/>
-                    }
+      <Col md={10} className="p-0">
+        <div className="page-container p-4" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%)' }}>
+          <div className="page-header mb-4">
+            <h1>Product Catalog</h1>
+            <p>Browse and manage all available products</p>
+          </div>
+          
+          <div className="modern-card p-4 mb-4">
+            <div className="filter-section">
+              <div className="row g-3">
+                <div className="col-md-4">
+                  <div className="search-box">
+                    <i className="fas fa-search"></i>
+                    <input onChange={(e)=>setSearchKey(e.target.value)} type="text" className="modern-input" placeholder="Search products..." />
                   </div>
                 </div>
+                <div className="col-md-4">
+                  <label className="form-label" style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px', display: 'block' }}>Category</label>
+                  <select onChange={(e)=>filterCategory(e.target.value)} className="modern-select">
+                    <option defaultValue>All Categories</option>
+                    {allCategorys?.length > 0 ?
+                      allCategorys.map((item) => (
+                        <option key={item.id} value={item.name}>{item.name}</option>
+                      )) :
+                      <option>No Categories</option>
+                    }
+                  </select>
+                </div>
+                <div className="col-md-4">
+                  <label className="form-label" style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px', display: 'block' }}>Brand</label>
+                  <select onChange={(e)=>filterBrand(e.target.value)} className="modern-select">
+                    <option defaultValue>All Brands</option>
+                    {allBrands?.length > 0 ?
+                      allBrands.map((item) => (
+                        <option key={item.id} value={item.name}>{item.name}</option>
+                      )) :
+                      <option>No Brands</option>
+                    }
+                  </select>
+                </div>
               </div>
+            </div>
+          </div>
+          
+          <div className="modern-card overflow-hidden">
+            <div className="table-responsive">
+              <table className="modern-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Brand</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Supplier</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentItems?.length > 0 ?
+                    currentItems.map((item,index) => (
+                      <tr key={item.id || index}>
+                        <td><strong>{startingIndex+index+1}</strong></td>
+                        <td><strong>{item.name}</strong></td>
+                        <td><span className="badge-modern badge-info">{item.category}</span></td>
+                        <td><span className="badge-modern badge-success">{item.brand}</span></td>
+                        <td style={{ color: '#10b981', fontWeight: 'bold' }}>₹{item.price}</td>
+                        <td>
+                          <span className={`badge-modern ${item.stock > 10 ? 'badge-success' : item.stock > 0 ? 'badge-warning' : 'badge-danger'}`}>
+                            {item.stock} units
+                          </span>
+                        </td>
+                        <td>{item.companyname}</td>
+                        <td><Sell details={item}/></td>
+                      </tr>
+                    )) :
+                    <tr>
+                      <td colSpan="8" className='text-center'>
+                        <div className="empty-state">
+                          <div className="empty-state-icon">📦</div>
+                          <p className="empty-state-title">No Products Found</p>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+              {currentItems?.length>0 &&
+                <div className="p-4" style={{ textAlign: 'center', borderTop: '1px solid #e5e7eb' }}>
+                  <Pgz totalitems={allProducts.length} itemPerPage={8} setcurrentPage={setcurrentPage} currentPage={currentPage}/>
+                </div>
+              }
             </div>
           </div>
         </div>

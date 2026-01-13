@@ -4,6 +4,7 @@ import SideBarAdmin from './SideBarAdmin'
 import { addbrandAPI, addCategoryAPI, addcompanyAPI, addproductsAPI, getAllBrandAPI, getAllCategoryAPI, getAllCompanyAPI } from '../Services/allAPIs'
 import { toast } from 'react-toastify';
 import { brandResponseContext, categoryResponseContext, companyResponseContext } from '../Contexts/ContextAPI';
+import '../Styles/admin-pages.css'
 
 
 
@@ -350,142 +351,137 @@ function CreateProdcut() {
     }
   return (
     <>
-    <Row>
-      <Col lg={2}>
+    <Row style={{ margin: 0 }}>
+      <Col md={2} className="p-0">
       <SideBarAdmin/>
       </Col>
 
-      <Col lg={10} > 
-      <div className="container" style={{background: 'linear-gradient(135deg,rgb(203, 227, 208),rgb(68, 192, 76))'}}>
+      <Col md={10} className="p-0"> 
+      <div className="page-container p-4" style={{background: 'linear-gradient(135deg, #f8fafc 0%, #ecfdf5 100%)'}}>
+      <div className="page-header mb-4">
+        <h1>Product Management</h1>
+        <p>Create and manage your inventory products</p>
+      </div>
       <div className="row">
 
-      <div className="col-md-6">
-      <div className="card p-4 border rounded" style={{ backgroundColor: '#e6f7ff' }}>
-        <h2 className="mb-4 ">ADD NEW PRODUCT</h2>
+      <div className="col-lg-6">
+      <div className="form-card">
+        <h3 className="mb-4"><i className="fas fa-box me-2"></i>Add New Product</h3>
 
         
-          <div className="row mb-3">
-            <label htmlFor="name" className="col-sm-4 col-form-label">Name</label>
-            <div className="col-sm-8">
-              <input onChange={(e)=>setallproducts({...allproducts,name:e.target.value})} value={allproducts.name} type="text" className="form-control" id="name" placeholder="Name" />
-            </div>
-          </div>
-
-          <div className="row mb-3">
-            <label htmlFor="price" className="col-sm-4 col-form-label">Price</label>
-            <div className="col-sm-8">
-              <input onChange={(e)=>setallproducts({...allproducts,price:e.target.value})} value={allproducts.price} type="text" className="form-control" id="price" placeholder="Price" />
-            </div>
-          </div>
-
-          <div className="row mb-3">
-            <label htmlFor="stock" className="col-sm-4 col-form-label">Stock</label>
-            <div className="col-sm-8">
-              <input onChange={(e)=>setallproducts({...allproducts,stock:e.target.value})} value={allproducts.stock} type="text" className="form-control" id="stock" placeholder="Stock" />
-            </div>
-          </div>
-
-          <div className="row mb-3">
-            <label htmlFor="seller" className="col-sm-4 col-form-label">Purchasing Company</label>
-            <div className="col-sm-8">
-              <select onChange={(e)=>setallproducts({...allproducts,companyname:e.target.value})} value={allproducts.companyname} className="form-select" id="seller">
-                <option defaultValue>Select Company</option>
-                {allCompany?.length > 0 ?
-               allCompany.map((item) => (
-                <option value={item.companyname}>{item.companyname}</option>
-               ))
-               :
-              <option className='text-danger'>Nothing To Display...</option>
-               }
-
-              </select>
-            </div>
-          </div>
-
-          <div className="row mb-3">
-            <label htmlFor="category" className="col-sm-4 col-form-label">Category</label>
-            <div className="col-sm-8">
-              <select onChange={(e)=>setallproducts({...allproducts,category:e.target.value})} value={allproducts.category} className="form-select" id="category">
-                <option defaultValue>Select Category</option>
-               {allCategorys?.length > 0 ?
-               allCategorys.map((item) => (
-                <option value={item.name}>{item.name}</option>
-               ))
-               :
-              <option className='text-danger'>Nothing To Display...</option>
-               }
-
-              </select>
-            </div>
-          </div>
-
-          <div className="row mb-3">
-            <label htmlFor="brand" className="col-sm-4 col-form-label">Brand</label>
-            <div className="col-sm-8">
-              <select onChange={(e)=>setallproducts({...allproducts,brand:e.target.value})} value={allproducts.brand} className="form-select" id="brand">
-                <option defaultValue>Select brand</option>
-                {allBrands?.length > 0 ?
-               allBrands.map((item) => (
-                <option value={item.name}>{item.name}</option>
-               ))
-               :
-              <option className='text-danger'>Nothing To Display...</option>
-               }
-
-              </select>
-            </div>
-          </div>
-
-          <div className="row mb-3">
-            <label htmlFor="size" className="col-sm-4 col-form-label">Size</label>
-            <div className="col-sm-8">
-              <select onChange={(e)=>setallproducts({...allproducts,size:e.target.value})} value={allproducts.size} className="form-select" id="size">
-                <option defaultValue>Select Product Size</option>
-                <option value="Small">Small</option>
-                <option value="Medium">Medium</option>
-                <option value="Large">Large</option>
-              </select>
-            </div>
+          <div className="mb-3">
+            <label htmlFor="name" className="form-label">Product Name</label>
+            <input onChange={(e)=>setallproducts({...allproducts,name:e.target.value})} value={allproducts.name} type="text" className="modern-input" id="name" placeholder="Enter product name" />
           </div>
 
           <div className="mb-3">
-            <label htmlFor="description" className="form-label">Description</label>
-            <textarea onChange={(e)=>setallproducts({...allproducts,description:e.target.value})} value={allproducts.description} className="form-control" id="description" rows="3" placeholder="Description"></textarea>
+            <label htmlFor="price" className="form-label">Price</label>
+            <input onChange={(e)=>setallproducts({...allproducts,price:e.target.value})} value={allproducts.price} type="number" className="modern-input" id="price" placeholder="Enter price" />
           </div>
 
-          <button onClick={addProduct}  className="btn btn-primary">ADD PRODUCT</button>
+          <div className="mb-3">
+            <label htmlFor="stock" className="form-label">Stock Quantity</label>
+            <input onChange={(e)=>setallproducts({...allproducts,stock:e.target.value})} value={allproducts.stock} type="number" className="modern-input" id="stock" placeholder="Enter stock quantity" />
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="seller" className="form-label">Purchasing Company</label>
+            <select onChange={(e)=>setallproducts({...allproducts,companyname:e.target.value})} value={allproducts.companyname} className="modern-select" id="seller">
+              <option defaultValue>Select Supplier</option>
+              {allCompany?.length > 0 ?
+             allCompany.map((item) => (
+              <option key={item.id} value={item.companyname}>{item.companyname}</option>
+             ))
+             :
+            <option>No Suppliers Available</option>
+             }
+
+            </select>
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="category" className="form-label">Category</label>
+            <select onChange={(e)=>setallproducts({...allproducts,category:e.target.value})} value={allproducts.category} className="modern-select" id="category">
+              <option defaultValue>Select Category</option>
+             {allCategorys?.length > 0 ?
+             allCategorys.map((item) => (
+              <option key={item.id} value={item.name}>{item.name}</option>
+             ))
+             :
+            <option>No Categories Available</option>
+             }
+
+            </select>
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="brand" className="form-label">Brand</label>
+            <select onChange={(e)=>setallproducts({...allproducts,brand:e.target.value})} value={allproducts.brand} className="modern-select" id="brand">
+              <option defaultValue>Select Brand</option>
+              {allBrands?.length > 0 ?
+             allBrands.map((item) => (
+              <option key={item.id} value={item.name}>{item.name}</option>
+             ))
+             :
+            <option>No Brands Available</option>
+             }
+
+            </select>
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="size" className="form-label">Product Size</label>
+            <select onChange={(e)=>setallproducts({...allproducts,size:e.target.value})} value={allproducts.size} className="modern-select" id="size">
+              <option defaultValue>Select Size</option>
+              <option value="Small">Small</option>
+              <option value="Medium">Medium</option>
+              <option value="Large">Large</option>
+            </select>
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="description" className="form-label">Product Description</label>
+            <textarea onChange={(e)=>setallproducts({...allproducts,description:e.target.value})} value={allproducts.description} className="modern-textarea" id="description" rows="3" placeholder="Enter product details..."></textarea>
+          </div>
+
+          <button onClick={addProduct} className="modern-btn modern-btn-primary w-100">
+            <i className="fas fa-plus me-2"></i>ADD PRODUCT
+          </button>
         
       </div>
     </div>
         
         
+        <div className="col-lg-6">
 
-        
-        <div className="col-md-6 mt-5">
-
-        <div className="card p-4 border rounded mb-3">
-            <h5 className="mb-3">CREATE NEW COMPANY</h5>
+        <div className="form-card mb-4">
+            <h4 className="mb-3"><i className="fas fa-building me-2"></i>Create New Supplier</h4>
             <div className="mb-3">
-              <input onChange={e=>setcompanyDetails({companyname:e.target.value})} value={companyDetails.name}   type="text" className="form-control" placeholder="Company Name" />
+              <input onChange={e=>setcompanyDetails({companyname:e.target.value})} value={companyDetails.companyname} type="text" className="modern-input" placeholder="Enter company name" />
             </div>
-            <button onClick={addCompany}  className="btn btn-success">CREATE COMPANY</button>
+            <button onClick={addCompany} className="modern-btn modern-btn-success w-100">
+              <i className="fas fa-plus me-2"></i>CREATE SUPPLIER
+            </button>
           </div>
           
-
-          <div className="card p-4 border rounded mb-3">
-            <h5 className="mb-3">CREATE NEW CATEGORY</h5>
+          <div className="form-card mb-4">
+            <h4 className="mb-3"><i className="fas fa-folder me-2"></i>Create New Category</h4>
             <div className="mb-3">
-              <input onChange={e=>setcategoryDetails({name:e.target.value})} value={categoryDetails.name} type="text" className="form-control" placeholder="Category Name" />
+              <input onChange={e=>setcategoryDetails({name:e.target.value})} value={categoryDetails.name} type="text" className="modern-input" placeholder="Enter category name" />
             </div>
-            <button onClick={addCategory} className="btn btn-info">CREATE CATEGORY</button>
+            <button onClick={addCategory} className="modern-btn modern-btn-info w-100">
+              <i className="fas fa-plus me-2"></i>CREATE CATEGORY
+            </button>
           </div>
 
-          <div className="card p-4 border rounded">
-            <h5 className="mb-3">CREATE NEW BRAND</h5>
+          <div className="form-card">
+            <h4 className="mb-3"><i className="fas fa-tag me-2"></i>Create New Brand</h4>
             <div className="mb-3">
-              <input onChange={e=>setbrandDetails({name:e.target.value})} value={brandDetails.name} type="text" className="form-control" placeholder="Brand Name" />
+              <input onChange={e=>setbrandDetails({name:e.target.value})} value={brandDetails.name} type="text" className="modern-input" placeholder="Enter brand name" />
             </div>
-            <button onClick={addBrand} className="btn btn-warning">CREATE BRAND</button>
+            <button onClick={addBrand} className="modern-btn modern-btn-warning w-100">
+              <i className="fas fa-plus me-2"></i>CREATE BRAND
+            </button>
           </div>
         </div>
 

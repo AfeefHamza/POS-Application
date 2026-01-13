@@ -7,6 +7,7 @@ import SideBarAdmin from '../Admin/SideBarAdmin'
 import { getAllBrandAPI, getAllCategoryAPI, getAllProductsAPI } from '../Services/allAPIs'
 import { deleteProductResponseContext, updateProductResponseContext, updateStockResponseContext } from '../Contexts/ContextAPI'
 import Pgz from './AdminComponents/Pgz'
+import '../Styles/admin-pages.css'
 
 function AdminProducts() {
 
@@ -107,84 +108,122 @@ function AdminProducts() {
     let currentItems = allProducts.slice(startingIndex, endingIndex)
 
     return (
-        <Row>
-            <Col lg={2} className="bg-dark text-white vh-100">
+        <Row style={{ margin: 0 }}>
+            <Col md={2} className="p-0">
                 <SideBarAdmin />
             </Col>
-            <Col lg={10}>
-                <div className="container-fluid p-4" style={{ backgroundColor: '#f0f8ff' }}>
-                    <div className="card shadow-lg border-0 rounded-4" style={{ backgroundColor: '#e6f7ff' }}>
-                        <div className="card-body">
-                            <div className="row mb-4 p-3 bg-white rounded-4" >
-                                <div className="col-md-3">
-                                    <label className="form-label fw-bold">Search by Product Name</label>
-                                    <input onChange={(e) => setSearchKey(e.target.value)} type="text" className="form-control" placeholder="Search..." />
+            <Col md={10} className="p-0">
+                <div className="page-container p-4" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%)' }}>
+                    <div className="page-header mb-4">
+                        <h1>Manage Products</h1>
+                        <p>View, edit, and manage all your products efficiently</p>
+                    </div>
+
+                    <div className="modern-card p-4 mb-4">
+                        <div className="filter-section">
+                            <div className="row">
+                                <div className="col-md-4 mb-3">
+                                    <div className="filter-group">
+                                        <label>Search by Product Name</label>
+                                        <div className="search-box">
+                                            <i className="fas fa-search"></i>
+                                            <input 
+                                                onChange={(e) => setSearchKey(e.target.value)} 
+                                                type="text" 
+                                                className="modern-input" 
+                                                placeholder="Search products..." 
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="col-md-3">
-                                    <label className="form-label fw-bold">Filter by Category</label>
-                                    <select onChange={(e) => filterCategory(e.target.value)} className="form-select">
-                                        <option defaultValue>Filter by Category</option>
-                                        {allCategorys.length > 0 ?
-                                            allCategorys.map((item) => (
-                                                <option key={item.name} value={item.name}>{item.name}</option>
-                                            )) :
-                                            <option className='text-danger'>Nothing To Display...</option>
-                                        }
-                                    </select>
+                                <div className="col-md-4 mb-3">
+                                    <div className="filter-group">
+                                        <label>Filter by Category</label>
+                                        <select onChange={(e) => filterCategory(e.target.value)} className="modern-select">
+                                            <option defaultValue>Filter by Category</option>
+                                            {allCategorys.length > 0 ?
+                                                allCategorys.map((item) => (
+                                                    <option key={item.name} value={item.name}>{item.name}</option>
+                                                )) :
+                                                <option className='text-danger'>Nothing To Display...</option>
+                                            }
+                                        </select>
+                                    </div>
                                 </div>
-                                <div className="col-md-3">
-                                    <label className="form-label fw-bold">Filter by Brand</label>
-                                    <select onChange={(e) => filterBrand(e.target.value)} className="form-select">
-                                        <option defaultValue>Filter by Brand</option>
-                                        {allBrands.length > 0 ?
-                                            allBrands.map((item) => (
-                                                <option key={item.name} value={item.name}>{item.name}</option>
-                                            )) :
-                                            <option className='text-danger'>Nothing To Display...</option>
-                                        }
-                                    </select>
+                                <div className="col-md-4 mb-3">
+                                    <div className="filter-group">
+                                        <label>Filter by Brand</label>
+                                        <select onChange={(e) => filterBrand(e.target.value)} className="modern-select">
+                                            <option defaultValue>Filter by Brand</option>
+                                            {allBrands.length > 0 ?
+                                                allBrands.map((item) => (
+                                                    <option key={item.name} value={item.name}>{item.name}</option>
+                                                )) :
+                                                <option className='text-danger'>Nothing To Display...</option>
+                                            }
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="table-responsive">
-                                <table className="table table-striped table-hover table-bordered">
-                                    <thead className="table-primary">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Product Name</th>
-                                            <th>Category</th>
-                                            <th>Brand</th>
-                                            <th>Price</th>
-                                            <th>Stock</th>
-                                            <th>Purchase From</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {currentItems.length > 0 ?
-                                            currentItems.map((item, index) => (
-                                                <tr key={item.id}>
-                                                    <td>{startingIndex + index + 1}</td>
-                                                    <td>{item.name}</td>
-                                                    <td>{item.category}</td>
-                                                    <td>{item.brand}</td>
-                                                    <td>{item.price}</td>
-                                                    <td>{item.stock}</td>
-                                                    <td>{item.companyname}</td>
-                                                    <td>
+                        </div>
+                    </div>
+
+                    <div className="modern-card overflow-hidden">
+                        <div className="table-responsive">
+                            <table className="modern-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Product Name</th>
+                                        <th>Category</th>
+                                        <th>Brand</th>
+                                        <th>Price</th>
+                                        <th>Stock</th>
+                                        <th>Purchase From</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {currentItems.length > 0 ?
+                                        currentItems.map((item, index) => (
+                                            <tr key={item.id}>
+                                                <td><strong>{startingIndex + index + 1}</strong></td>
+                                                <td>{item.name}</td>
+                                                <td><span className="badge-modern badge-info">{item.category}</span></td>
+                                                <td><span className="badge-modern badge-success">{item.brand}</span></td>
+                                                <td><strong>${item.price}</strong></td>
+                                                <td>
+                                                    <span className={`badge-modern ${item.stock > 50 ? 'badge-success' : item.stock > 20 ? 'badge-warning' : 'badge-danger'}`}>
+                                                        {item.stock} units
+                                                    </span>
+                                                </td>
+                                                <td>{item.companyname}</td>
+                                                <td>
+                                                    <div className="action-buttons">
                                                         <Addstock details={item} />
                                                         <UpdateProductInfo details={item} />
                                                         <Delete insideAdminPr={true} details={item} />
-                                                    </td>
-                                                </tr>
-                                            )) :
-                                            <tr><td colSpan="8" className="text-center">No Products To Display</td></tr>
-                                        }
-                                    </tbody>
-                                </table>
-                                {currentItems.length > 0 &&
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )) :
+                                        <tr>
+                                            <td colSpan="8" className="text-center">
+                                                <div className="empty-state">
+                                                    <div className="empty-state-icon">📭</div>
+                                                    <p className="empty-state-title">No Products Found</p>
+                                                    <p>Try adjusting your filters or search terms</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            {currentItems.length > 0 &&
+                                <div className="p-4" style={{ textAlign: 'center', borderTop: '1px solid #e5e7eb' }}>
                                     <Pgz totalitems={allProducts.length} itemPerPage={8} setcurrentPage={setcurrentPage} currentPage={currentPage} />
-                                }
-                            </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

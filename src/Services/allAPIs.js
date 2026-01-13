@@ -11,6 +11,20 @@ export const userVerifyOTPAPI = async (reqBody) => {
   return await commonAPI("POST", `${server_url}/verify-otp`, reqBody);
 };
 
+export const forgotPasswordAPI = async (reqBody) => {
+    // { email: "" }
+  return await commonAPI("POST", `${server_url}/forgot-password`, reqBody);
+};
+export const verifyresetOTPAPI = async (reqBody) => {
+    // { userId: "", otp: ""}
+  return await commonAPI("POST", `${server_url}/verify-reset-otp`, reqBody);
+};
+
+export const resetPasswordAPI = async (reqBody) => {
+    // { userId: "", newPassword: "", confirmNewPassword: "", otp: "" }
+  return await commonAPI("POST", `${server_url}/reset-password`, reqBody);
+};
+
 
 export const userLoginAPI = async(reqBody)=>{
 

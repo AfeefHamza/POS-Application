@@ -5,6 +5,7 @@ import SideBarAdmin from './SideBarAdmin'
 import Delete from './AdminComponents/Delete'
 import { deleteUserResponeContext } from '../Contexts/ContextAPI'
 import Pgz from './AdminComponents/Pgz'
+import '../Styles/admin-pages.css'
 
 function UsersList() {
   const [allUsers,setallUsers]=useState([])
@@ -40,53 +41,76 @@ function UsersList() {
 
   return (
     <>
-    <Row>
-      <Col lg={2}>
+    <Row style={{ margin: 0 }}>
+      <Col md={2} className="p-0">
         <SideBarAdmin/>
       </Col>
 
-      <Col lg={10}>
-        <div className="container-fluid bg-light p-4" style={{ background: 'linear-gradient(135deg,rgb(168, 229, 175), #e0f2fe)' }}>
-          <div className="row">
-            <div className="col-md-12">
-              <div className="card shadow-lg border-0 rounded-4">
-                <div className="card-body" style={{ background: 'linear-gradient(135deg,rgb(204, 214, 233),rgb(179, 212, 193))' }}>
-                  <div className="table-responsive">
-                    <table className="table table-striped table-bordered">
-                      <thead className="table-primary">
-                        <tr>
-                          <th>#</th>
-                          <th>Users</th>
-                          <th>Email</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      {currentItems?.length > 0 ?
-                        currentItems.map((item,index) => (
-                          <tr key={index}>
-                            <td>{startingIndex+index+1}</td>
-                            <td>{item.username}</td>
-                            <td>{item.email}</td>
-                            <td>
-                              <Delete userdata={item} insideUserList={true} />
-                            </td>
-                          </tr>
-                        ))
-                        :
-                        <tr>
-                          <td colSpan="4" className='text-danger text-center'>Nothing To Display...</td>
-                        </tr>
-                      }
-                      </tbody>
-                    </table>
-                    {
-                      currentItems?.length>0 &&
-                      <Pgz totalitems={allUsers.length} itemPerPage={8} setcurrentPage={setcurrentPage} currentPage={currentPage}/>
-                    }
-                  </div>
+      <Col md={10} className="p-0">
+        <div className="page-container p-4" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #f3e8ff 100%)' }}>
+          <div className="page-header mb-4">
+            <h1>User Management</h1>
+            <p>Manage all registered users and administrators</p>
+          </div>
+          <div className="modern-card overflow-hidden">
+            <div className="table-responsive">
+              <table className="modern-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {currentItems?.length > 0 ?
+                  currentItems.map((item,index) => (
+                    <tr key={index}>
+                      <td><strong>{startingIndex+index+1}</strong></td>
+                      <td>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <div style={{ 
+                            width: '32px', 
+                            height: '32px', 
+                            borderRadius: '50%', 
+                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            fontSize: '14px'
+                          }}>
+                            {item.username?.charAt(0)?.toUpperCase()}
+                          </div>
+                          <span>{item.username}</span>
+                        </div>
+                      </td>
+                      <td>{item.email}</td>
+                      <td>
+                        <Delete userdata={item} insideUserList={true} />
+                      </td>
+                    </tr>
+                  ))
+                  :
+                  <tr>
+                    <td colSpan="4" className='text-center'>
+                      <div className="empty-state">
+                        <div className="empty-state-icon">👤</div>
+                        <p className="empty-state-title">No Users Found</p>
+                      </div>
+                    </td>
+                  </tr>
+                }
+                </tbody>
+              </table>
+              {
+                currentItems?.length>0 &&
+                <div className="p-4" style={{ textAlign: 'center', borderTop: '1px solid #e5e7eb' }}>
+                  <Pgz totalitems={allUsers.length} itemPerPage={8} setcurrentPage={setcurrentPage} currentPage={currentPage}/>
                 </div>
-              </div>
+              }
             </div>
           </div>
         </div>

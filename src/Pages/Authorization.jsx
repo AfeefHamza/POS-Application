@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { userLoginAPI, userRegisterAPI, userVerifyOTPAPI } from '../Services/allAPIs'; 
+import { forgotPasswordAPI, resetPasswordAPI, userLoginAPI, userRegisterAPI, userVerifyOTPAPI, verifyresetOTPAPI } from '../Services/allAPIs'; 
 import { toast } from 'react-toastify';
+import '../Styles/admin-pages.css';
 
 function Authorization({ insideRegister }) {
   const [registrationData, setRegistrationData] = useState({
@@ -11,7 +12,16 @@ function Authorization({ insideRegister }) {
   });
   const [userId, setUserId] = useState(null);
   const [otp, setOtp] = useState("");    
-  const [isVerifying, setIsVerifying] = useState(false); 
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [forgotPasswordStep, setForgotPasswordStep] = useState(1); // 1: email, 2: otp, 3: new password
+  const [forgotPasswordData, setForgotPasswordData] = useState({
+    email: "",
+    otp: "",
+    newPassword: "",
+    confirmPassword: ""
+  });
+  const [forgotPasswordUserId, setForgotPasswordUserId] = useState(null);
   const navigate = useNavigate();
 
   const handleRegister = async () => {
@@ -95,87 +105,251 @@ function Authorization({ insideRegister }) {
 
   return (
     <>
-      <div className="container" style={{ maxWidth: '400px', marginTop: "100px" }}>
-        <div className="card">
-          <div className="card-body">
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+        <div style={{ width: '100%', maxWidth: '420px', padding: '20px' }}>
+          <div className="form-card" style={{ background: 'white', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
+            <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+              <h2 style={{ fontSize: '32px', fontWeight: 'bold', color: '#0f3460', marginBottom: '10px' }}>
+                {isForgotPassword ? '🔑 Reset Password' : (insideRegister ? '🚀 Create Account' : '🔐 Welcome Back')}
+              </h2>
+              <p style={{ color: '#6b7280', fontSize: '14px' }}>
+                {isForgotPassword ? 'Enter your email to receive OTP' : (insideRegister ? 'Join us to manage your inventory' : 'Sign in to your account')}
+              </p>
+            </div>
 
-            {!isVerifying ? (
+            {!isForgotPassword && !isVerifying ? (
               <>
-                <h2 className="card-title fw-bold mb-3">Login</h2>
-                <p className="card-text text-muted mb-4">
-                  Enter your email below to login to your account
-                </p>
                 {insideRegister &&
                   <div className="mb-3">
-                    <label htmlFor="name" className="form-label fw-bold">
-                      User Name
+                    <label htmlFor="name" className="form-label" style={{ fontWeight: '600', color: '#1f2937' }}>
+                      <i className="fas fa-user me-2" style={{ color: '#667eea' }}></i>Username
                     </label>
                     <input
                       onChange={e => setRegistrationData({ ...registrationData, username: e.target.value })}
                       value={registrationData.username}
-                      type="name"
-                      className="form-control"
+                      type="text"
+                      className="modern-input"
                       id="name"
-                      placeholder="Username..."
+                      placeholder="Enter your username"
+                      style={{ borderRadius: '8px', padding: '12px' }}
                     />
                   </div>
                 }
                 <div className="mb-3">
-                  <label htmlFor="email" className="form-label fw-bold">
-                    Email
+                  <label htmlFor="email" className="form-label" style={{ fontWeight: '600', color: '#1f2937' }}>
+                    <i className="fas fa-envelope me-2" style={{ color: '#667eea' }}></i>Email Address
                   </label>
                   <input
                     onChange={e => setRegistrationData({ ...registrationData, email: e.target.value })}
                     value={registrationData.email}
                     type="email"
-                    className="form-control"
+                    className="modern-input"
                     id="email"
-                    placeholder="abc@example.com"
+                    placeholder="your@email.com"
+                    style={{ borderRadius: '8px', padding: '12px' }}
                   />
                 </div>
-                <div className="mb-2 d-flex justify-content-between align-items-center">
-                  <label htmlFor="password" className="form-label fw-bold">
-                    Password
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label" style={{ fontWeight: '600', color: '#1f2937' }}>
+                    <i className="fas fa-lock me-2" style={{ color: '#667eea' }}></i>Password
                   </label>
+                  <input
+                    onChange={e => setRegistrationData({ ...registrationData, password: e.target.value })}
+                    value={registrationData.password}
+                    type="password"
+                    className="modern-input"
+                    id="password"
+                    placeholder="••••••••"
+                    style={{ borderRadius: '8px', padding: '12px' }}
+                  />
                 </div>
-                <input
-                  onChange={e => setRegistrationData({ ...registrationData, password: e.target.value })}
-                  value={registrationData.password}
-                  type="password"
-                  className="form-control"
-                  id="password"
-                />
+                {!insideRegister && (
+                  <div style={{ textAlign: 'right', marginBottom: '15px' }}>
+                    <button 
+                      onClick={() => setIsForgotPassword(true)} 
+                      style={{ 
+                        background: 'none', 
+                        border: 'none', 
+                        color: '#667eea', 
+                        fontSize: '14px', 
+                        cursor: 'pointer', 
+                        fontWeight: '500',
+                        textDecoration: 'underline'
+                      }}
+                    >
+                      Forgot Password?
+                    </button>
+                  </div>
+                )}
                 {insideRegister ?
-                  <button onClick={handleRegister} className="btn btn-dark w-100 mt-3">Register</button>
+                  <button onClick={handleRegister} className="modern-btn modern-btn-primary w-100" style={{ padding: '12px', fontSize: '16px', fontWeight: '600', borderRadius: '8px' }}>
+                    <i className="fas fa-user-plus me-2"></i>Create Account
+                  </button>
                   :
-                  <button onClick={handleLogin} className="btn btn-dark w-100 mt-3">Login</button>
+                  <button onClick={handleLogin} className="modern-btn modern-btn-primary w-100" style={{ padding: '12px', fontSize: '16px', fontWeight: '600', borderRadius: '8px' }}>
+                    <i className="fas fa-sign-in-alt me-2"></i>Sign In
+                  </button>
                 }
-                {insideRegister ?
-                  <p className="mt-4 text-center"> Already have an account? <Link to={'/login'}>Login</Link></p>
-                  :
-                  <p className="mt-4 text-center">Don't have an account? <Link to={'/register'}>Sign up</Link> </p>
-                }
+                <div style={{ textAlign: 'center', marginTop: '20px', paddingTop: '20px', borderTop: '1px solid #e5e7eb' }}>
+                  {insideRegister ?
+                    <p style={{ color: '#6b7280', fontSize: '14px' }}>Already have an account? <Link to={'/login'} style={{ color: '#667eea', textDecoration: 'none', fontWeight: '600' }}>Login</Link></p>
+                    :
+                    <p style={{ color: '#6b7280', fontSize: '14px' }}>Don't have an account? <Link to={'/register'} style={{ color: '#667eea', textDecoration: 'none', fontWeight: '600' }}>Sign up</Link></p>
+                  }
+                </div>
               </>
-            ) : (
+            ) : isForgotPassword && forgotPasswordStep === 1 ? (
+              // Step 1: Request Password Reset - Email Input
               <>
-                <h2 className="card-title fw-bold mb-3">Verify OTP</h2>
-                <p className="card-text text-muted mb-4">
-                  Enter the OTP sent to your email address to complete registration.
+                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                  <i className="fas fa-envelope-open-text" style={{ fontSize: '48px', color: '#667eea', marginBottom: '10px' }}></i>
+                </div>
+                <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '20px', textAlign: 'center' }}>
+                  Enter your registered email address to receive an OTP
                 </p>
                 <div className="mb-3">
-                  <label htmlFor="otp" className="form-label fw-bold">
-                    OTP
+                  <label htmlFor="forgotEmail" className="form-label" style={{ fontWeight: '600', color: '#1f2937' }}>
+                    <i className="fas fa-envelope me-2" style={{ color: '#667eea' }}></i>Email Address
+                  </label>
+                  <input
+                    type="email"
+                    className="modern-input"
+                    id="forgotEmail"
+                    placeholder="your@email.com"
+                    value={forgotPasswordData.email}
+                    onChange={(e) => setForgotPasswordData({ ...forgotPasswordData, email: e.target.value })}
+                    style={{ borderRadius: '8px', padding: '12px' }}
+                  />
+                </div>
+                <button onClick={handleForgotPasswordRequest} className="modern-btn modern-btn-primary w-100" style={{ padding: '12px', fontSize: '16px', fontWeight: '600', borderRadius: '8px', marginBottom: '10px' }}>
+                  <i className="fas fa-paper-plane me-2"></i>Send OTP
+                </button>
+                <button 
+                  onClick={() => setIsForgotPassword(false)} 
+                  className="modern-btn modern-btn-info w-100" 
+                  style={{ padding: '12px', fontSize: '16px', fontWeight: '600', borderRadius: '8px' }}
+                >
+                  <i className="fas fa-arrow-left me-2"></i>Back to Login
+                </button>
+              </>
+            ) : isForgotPassword && forgotPasswordStep === 2 ? (
+              // Step 2: Verify OTP
+              <>
+                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                  <i className="fas fa-key" style={{ fontSize: '48px', color: '#667eea', marginBottom: '10px' }}></i>
+                </div>
+                <h3 style={{ color: '#1f2937', fontWeight: 'bold', marginBottom: '10px', textAlign: 'center' }}>Verify OTP</h3>
+                <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '20px', textAlign: 'center' }}>
+                  Enter the OTP sent to <strong>{forgotPasswordData.email}</strong>
+                </p>
+                <div className="mb-3">
+                  <label htmlFor="forgotOtp" className="form-label" style={{ fontWeight: '600', color: '#1f2937' }}>
+                    <i className="fas fa-mobile-alt me-2" style={{ color: '#667eea' }}></i>OTP Code
                   </label>
                   <input
                     type="text"
-                    className="form-control"
-                    id="otp"
-                    placeholder="Enter OTP"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
+                    className="modern-input"
+                    id="forgotOtp"
+                    placeholder="Enter 6-digit OTP"
+                    value={forgotPasswordData.otp}
+                    onChange={(e) => setForgotPasswordData({ ...forgotPasswordData, otp: e.target.value })}
+                    style={{ borderRadius: '8px', padding: '12px', fontSize: '18px', letterSpacing: '2px', textAlign: 'center' }}
                   />
                 </div>
-                <button onClick={handleVerifyOTP} className="btn btn-dark w-100 mt-3">Verify OTP</button>
+                <button onClick={handleForgotPasswordOTPVerify} className="modern-btn modern-btn-success w-100" style={{ padding: '12px', fontSize: '16px', fontWeight: '600', borderRadius: '8px', marginBottom: '10px' }}>
+                  <i className="fas fa-check me-2"></i>Verify OTP
+                </button>
+                <button 
+                  onClick={() => {
+                    setForgotPasswordStep(1);
+                    setForgotPasswordData({ ...forgotPasswordData, otp: '' });
+                  }} 
+                  className="modern-btn modern-btn-info w-100" 
+                  style={{ padding: '12px', fontSize: '16px', fontWeight: '600', borderRadius: '8px' }}
+                >
+                  <i className="fas fa-arrow-left me-2"></i>Back
+                </button>
+              </>
+            ) : isForgotPassword && forgotPasswordStep === 3 ? (
+              // Step 3: Reset Password
+              <>
+                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                  <i className="fas fa-lock" style={{ fontSize: '48px', color: '#667eea', marginBottom: '10px' }}></i>
+                </div>
+                <h3 style={{ color: '#1f2937', fontWeight: 'bold', marginBottom: '10px', textAlign: 'center' }}>Create New Password</h3>
+                <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '20px', textAlign: 'center' }}>
+                  Enter your new password to reset your account access
+                </p>
+                <div className="mb-3">
+                  <label htmlFor="newPassword" className="form-label" style={{ fontWeight: '600', color: '#1f2937' }}>
+                    <i className="fas fa-lock me-2" style={{ color: '#667eea' }}></i>New Password
+                  </label>
+                  <input
+                    type="password"
+                    className="modern-input"
+                    id="newPassword"
+                    placeholder="••••••••"
+                    value={forgotPasswordData.newPassword}
+                    onChange={(e) => setForgotPasswordData({ ...forgotPasswordData, newPassword: e.target.value })}
+                    style={{ borderRadius: '8px', padding: '12px' }}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="confirmPassword" className="form-label" style={{ fontWeight: '600', color: '#1f2937' }}>
+                    <i className="fas fa-lock me-2" style={{ color: '#667eea' }}></i>Confirm Password
+                  </label>
+                  <input
+                    type="password"
+                    className="modern-input"
+                    id="confirmPassword"
+                    placeholder="••••••••"
+                    value={forgotPasswordData.confirmPassword}
+                    onChange={(e) => setForgotPasswordData({ ...forgotPasswordData, confirmPassword: e.target.value })}
+                    style={{ borderRadius: '8px', padding: '12px' }}
+                  />
+                </div>
+                <button onClick={handleResetPassword} className="modern-btn modern-btn-success w-100" style={{ padding: '12px', fontSize: '16px', fontWeight: '600', borderRadius: '8px', marginBottom: '10px' }}>
+                  <i className="fas fa-check-circle me-2"></i>Reset Password
+                </button>
+                <button 
+                  onClick={() => {
+                    setIsForgotPassword(false);
+                    setForgotPasswordStep(1);
+                    setForgotPasswordData({ email: "", otp: "", newPassword: "", confirmPassword: "" });
+                    setForgotPasswordUserId(null);
+                  }} 
+                  className="modern-btn modern-btn-info w-100" 
+                  style={{ padding: '12px', fontSize: '16px', fontWeight: '600', borderRadius: '8px' }}
+                >
+                  <i className="fas fa-arrow-left me-2"></i>Back to Login
+                </button>
+              </>
+            ) : (
+              <>
+                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                  <i className="fas fa-key" style={{ fontSize: '48px', color: '#667eea', marginBottom: '10px' }}></i>
+                </div>
+                <h3 style={{ color: '#1f2937', fontWeight: 'bold', marginBottom: '10px' }}>Verify Your Email</h3>
+                <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '20px', textAlign: 'center' }}>
+                  Enter the OTP sent to your email address to complete registration.
+                </p>
+                <div className="mb-3">
+                  <label htmlFor="otp" className="form-label" style={{ fontWeight: '600', color: '#1f2937' }}>
+                    <i className="fas fa-mobile-alt me-2" style={{ color: '#667eea' }}></i>OTP Code
+                  </label>
+                  <input
+                    type="text"
+                    className="modern-input"
+                    id="otp"
+                    placeholder="Enter 6-digit OTP"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    style={{ borderRadius: '8px', padding: '12px', fontSize: '18px', letterSpacing: '2px', textAlign: 'center' }}
+                  />
+                </div>
+                <button onClick={handleVerifyOTP} className="modern-btn modern-btn-success w-100" style={{ padding: '12px', fontSize: '16px', fontWeight: '600', borderRadius: '8px' }}>
+                  <i className="fas fa-check me-2"></i>Verify OTP
+                </button>
               </>
             )}
           </div>
